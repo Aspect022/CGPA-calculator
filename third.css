@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    background-color: #121212; /* Dark gray background */
+    color: #ffffff; /* White text for contrast */
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #121212, #1e1e2f);
+}
+
+/* Header Styling */
+header h1 {
+    font-size: 2.5rem;
+    color: #00d4ff; /* Bright blue for main heading */
+    text-align: center;
+    margin-bottom: 10px;
+    text-shadow: 0 0 10px #00d4ff, 0 0 20px #00d4ff;
+}
+
+header p {
+    font-size: 1.2rem;
+    color: #aaaaaa; /* Light gray for subtitle */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Section Styling */
+#cia-see-section {
+    background-color: #1e1e2f;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 800px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    background: #1e1e2f;
+    border: 2px solid #00d4ff;
+    box-shadow: 0px 4px 10px rgba(0, 212, 255, 0.5);
+}
+
+/* Heading Styling */
+h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #00d4ff; /* Bright blue for headings */
+}
+
+/* Table Styling */
+#cia-see-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#cia-see-table th, #cia-see-table td {
+    border: 1px solid #444;
+    padding: 10px;
+    text-align: center;
+}
+
+#cia-see-table th {
+    background-color: #29293d;
+    color: #00d4ff; /* Bright blue for table headers */
+    font-weight: bold;
+}
+
+#cia-see-table td input {
+    background-color: #2e2e42;
+    color: #ffffff;
+    border: 1px solid #555;
+    padding: 5px;
+    border-radius: 4px;
+    width: 90%;
+    text-align: center;
+    font-size: 0.9rem;
+    font-family: 'Courier New', Courier, monospace; /* Exam vibe font */
+}
+
+/* Button Styling */
+button {
+    background-color: #007bff; /* Vibrant blue button */
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.5);
+}
+
+button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 10px rgba(0, 86, 179, 0.6);
+}
+
+/* Footer Styling */
+footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #888;
+    text-align: center;
+}

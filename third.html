@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGPA Calculator - CIA & SEE Details</title>
+    <link rel="stylesheet" href="third.css">
+    <style>
+        .calculate-sgpa-button {
+            background-color: #28a745; /* Green color */
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 20px auto;
+            box-shadow: 0 4px 10px rgba(40, 167, 69, 0.5);
+        }
+
+        .calculate-sgpa-button:hover {
+            background-color: #218838; /* Darker green */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>SGPA Calculator - CIA & SEE Details</h1>
+        <p>Review your CIA and SEE marks, and make adjustments if needed.</p>
+    </header>
+    <section id="cia-see-section">
+        <h2>Marks Overview</h2>
+        <table id="cia-see-table">
+            <thead>
+                <tr>
+                    <th>Subject Name</th>
+                    <th>CIA Marks (out of 60)</th>
+                    <th>SEE Marks (out of 100)</th>
+                    <th>SEE Marks (out of 40)</th>
+                    <th>Total Marks</th>
+                </tr>
+            </thead>
+            <tbody id="dynamic-marks">
+                <!-- Rows will be dynamically added here -->
+            </tbody>
+        </table>
+        <button class="calculate-sgpa-button" id="calculate-sgpa-button">Calculate SGPA</button>
+    </section>
+    <footer>
+        &copy; 2024 SGPA Calculator. Made with ❤️ for students.
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const subjects = JSON.parse(localStorage.getItem("subjects")) || [];
+
+            if (!subjects.length) {
+                alert("No subjects data found! Returning to the first page.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            const tbody = document.getElementById("dynamic-marks");
+
+            subjects.forEach((subject, index) => {
+                const ciaMarks = parseFloat(subject.cia) || 0;
+                let seeMarks = parseFloat(subject.see) || 0;
+                let seeReduced = ((seeMarks / 100) * 40).toFixed(2);
+                let totalMarks = (ciaMarks + parseFloat(seeReduced)).toFixed(2);
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${subject.name}</td>
+                    <td>${ciaMarks}</td>
+                    <td><input type="number" value="${seeMarks}" min="0" max="100" class="see-marks-input" data-index="${index}"></td>
+                    <td class="see-reduced">${seeReduced}</td>
+                    <td class="total-marks">${totalMarks} <span class="skull-icon">${totalMarks < 40 ? "💀" : ""}</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            tbody.addEventListener("input", (event) => {
+                if (event.target.classList.contains("see-marks-input")) {
+                    const seeMarksInput = event.target;
+                    const rowIndex = parseInt(seeMarksInput.dataset.index);
+                    const seeMarks = parseFloat(seeMarksInput.value) || 0;
+                    const seeReduced = ((seeMarks / 100) * 40).toFixed(2);
+                    const ciaMarks = parseFloat(subjects[rowIndex].cia) || 0;
+                    const totalMarks = (ciaMarks + parseFloat(seeReduced)).toFixed(2);
+
+                    const row = tbody.rows[rowIndex];
+                    row.querySelector(".see-reduced").textContent = seeReduced;
+                    row.querySelector(".total-marks").innerHTML = `${totalMarks} <span class="skull-icon">${totalMarks < 40 ? "💀" : ""}</span>`;
+
+                    // Update the localStorage with the new SEE marks
+                    subjects[rowIndex].see = seeMarks;
+                    localStorage.setItem("subjects", JSON.stringify(subjects));
+                }
+            });
+
+            document.getElementById("calculate-sgpa-button").addEventListener("click", () => {
+    // Ensure that subjects data is saved in localStorage for the final page
+    const subjects = JSON.parse(localStorage.getItem("subjects")) || [];
+    if (subjects.length === 0) {
+        alert("No subjects data found! Please go back and enter your details.");
+        return;
+    }
+    
+    // Add any final processing here if needed before redirecting
+    
+    // Redirect to the final SGPA results page
+    window.location.href = "final.html";
+});
+
+        });
+    </script>
+</body>
+</html>

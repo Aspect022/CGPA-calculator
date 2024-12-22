@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGPA Calculator - Results</title>
+    <link rel="stylesheet" href="final.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            color: #ffffff;
+            position: relative;
+            overflow: hidden;
+        }
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 150%;
+            background: url('images/finalimg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            opacity: 1.20; /* Subtle effect */
+            z-index: -2;
+        }
+        .result-container {
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            max-width: 600px;
+            position: relative;
+            z-index: 1; /* Ensures content is above the background */
+        }
+        h1 {
+            color: #f39c12;
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px #f39c12, 0 0 20px #f39c12;
+        }
+        .sgpa-display {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #2ecc71;
+            text-shadow: 0 0 10px #2ecc71, 0 0 20px #2ecc71;
+            margin-bottom: 20px;
+        }
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+        .result-table th, .result-table td {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: center;
+        }
+        .result-table th {
+            background: linear-gradient(145deg, #34495e, #3b5363);
+            color: #ecf0f1;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ecf0f1;
+        }
+        .result-table tbody tr:nth-child(even) {
+            background-color: #2c3e50;
+        }
+        .result-table tbody tr:nth-child(odd) {
+            background-color: #34495e;
+        }
+        .result-table tbody tr.backlog td {
+            position: relative;
+        }
+        .result-table tbody tr.backlog td:first-child::before {
+            content: '\1F480'; /* Skull emoji */
+            font-size: 1.2rem;
+            position: absolute;
+            top: 50%;
+            left: -25px;
+            transform: translateY(-50%);
+            text-shadow: 0 0 10px #e74c3c;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #bdc3c7;
+        }
+        .footer a {
+            color: #f39c12;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="result-container">
+        <h1>Your SGPA</h1>
+        <div class="sgpa-display" id="sgpa-display">-</div>
+        <table class="result-table" id="results-table">
+            <thead>
+                <tr>
+                    <th>Grade</th>
+                    <th>Grade Points</th>
+                    <th>Credits</th>
+                    <th>Total Grade Score</th>
+                </tr>
+            </thead>
+            <tbody id="results-body">
+                <!-- Results rows will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+    <footer class="footer">&copy; 2024 SGPA Calculator. Made with ❤️ for students. <a href="#">Privacy Policy</a></footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const subjects = JSON.parse(localStorage.getItem("subjects")) || [];
+
+            if (!subjects.length) {
+                alert("No subjects data found! Returning to the first page.");
+                window.location.href = "index.html";
+                return;
+            }
+
+            let totalGradePoints = 0;
+            let totalCredits = 0;
+            const tbody = document.getElementById("results-body");
+
+            subjects.forEach(subject => {
+                const credits = parseInt(subject.credits, 10) || 0;
+                const totalMarks = parseFloat(subject.cia) + (parseFloat(subject.see) / 100 * 40);
+
+                let grade, gradePoints;
+                if (totalMarks >= 90) {
+                    grade = "A+";
+                    gradePoints = 10;
+                } else if (totalMarks >= 80) {
+                    grade = "A";
+                    gradePoints = 9;
+                } else if (totalMarks >= 70) {
+                    grade = "B+";
+                    gradePoints = 8;
+                } else if (totalMarks >= 60) {
+                    grade = "B";
+                    gradePoints = 7;
+                } else if (totalMarks >= 50) {
+                    grade = "C";
+                    gradePoints = 6;
+                } else {
+                    grade = "F";
+                    gradePoints = 0;
+                }
+
+                const gradeScore = gradePoints * credits;
+                totalGradePoints += gradeScore;
+                totalCredits += credits;
+
+                const row = document.createElement("tr");
+                if (grade === "F") {
+                    row.classList.add("backlog");
+                }
+                row.innerHTML = `
+                    <td>${grade}</td>
+                    <td>${gradePoints}</td>
+                    <td>${credits}</td>
+                    <td>${gradeScore}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            const sgpa = (totalGradePoints / totalCredits).toFixed(2);
+            document.getElementById("sgpa-display").textContent = sgpa;
+        });
+    </script>
+</body>
+</html>
